@@ -56,6 +56,20 @@
             },
          'packages': ['dovecot','dovecot-pigeonhole'],
     },
+    'CentOS': {
+        'config': {
+            'filename': 'local',
+            'local': '# no customization',
+            'dovecotext': {},
+            'confext': {},
+            'conf': {},
+            'ssl_certs': {},
+            'ssl_keys': {},
+            'ssl_certs_dir': '/etc/pki/dovecot/certs',
+            'ssl_keys_dir': '/etc/pki/dovecot/private',
+            },
+         'packages': ['dovecot','dovecot-pigeonhole'],
+    },
     'default': {
         'config': {
             'filename': 'local',
