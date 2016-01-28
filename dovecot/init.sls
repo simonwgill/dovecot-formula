@@ -6,6 +6,7 @@ dovecot_packages:
     - watch_in:
       - service: dovecot_service
 
+
 /etc/dovecot/{{ dovecot.config.filename }}.conf:
   file.managed:
     - contents: |
@@ -19,13 +20,17 @@ dovecot_packages:
 {% for name, content in dovecot.config.dovecotext.items() %}
 /etc/dovecot/dovecot-{{ name }}.conf.ext:
   file.managed:
-    - contents: |
-        {{ content | indent(8) }}
+    - source: salt://dovecot/files/conf.tmpl
+    - template: jinja
+    - context:
+      section: dovecotext
+      filename: {{ name }}
     - backup: minion
     - watch_in:
       - service: dovecot_service
     - require:
       - pkg: dovecot_packages
+
 {% endfor %}
 
 {% for name, content in dovecot.config.conf.items() %}

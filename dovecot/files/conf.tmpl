@@ -1,0 +1,4 @@
+{% from 'dovecot/conf/settings.sls' import dovecot with context %}
+{%- for key, value in dovecot.get('config').get(section).get(filename).items() %}
+{{ key }} = {{ value }}
+{%- endfor %}

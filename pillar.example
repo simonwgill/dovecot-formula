@@ -63,18 +63,17 @@ dovecot:
   
         # ssl
         ssl_cipher_list = EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!ECDSA:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA
-        ssl_cert = </etc/ssl/private/dovecot-one.crt
-        ssl_key = </etc/ssl/private/dovecot-one.key
+        ssl_cert = </etc/pki/dovecot/certs/dovecot-one.crt
+        ssl_key = </etc/pki/dovecot/private/dovecot-one.key
     
       dovecotext:
-        ldap: |
-          hosts = 0.0.0.0
-          base = dc=example, dc=com
-          scope = subtree
-          pass_attrs = uid=user,userPassword=password,\
-          homeDirectory=userdb_home,uidNumber=userdb_uid,gidNumber=userdb_gid
-          pass_filter = (&(objectClass=posixAccount)(uid=%u))
-          default_pass_scheme = SSHA
+        ldap: 
+          hosts: 0.0.0.0
+          base: 'dc=example, dc=com'
+          scope: subtree
+          pass_attrs: 'uid=user,userPassword=password,homeDirectory=userdb_home,uidNumber=userdb_uid,gidNumber=userdb_gid'
+          pass_filter: '(&(objectClass=posixAccount)(uid=%u))'
+          default_pass_scheme: SSHA
         dict-sql: |
           # Managed by salt
           
