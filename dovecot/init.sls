@@ -9,8 +9,10 @@ dovecot_packages:
 
 /etc/dovecot/{{ dovecot.config.filename }}.conf:
   file.managed:
-    - contents: |
-        {{ dovecot.config.local | indent(8) }}
+    - source: salt://dovecot/files/conf.tmpl
+    - template: jinja
+    - context:
+      section_reference: local
     - backup: minion
     - watch_in:
       - service: dovecot_service
@@ -23,8 +25,7 @@ dovecot_packages:
     - source: salt://dovecot/files/conf.tmpl
     - template: jinja
     - context:
-      section: dovecotext
-      filename: {{ name }}
+      section_reference: dovecotext:{{ name }}
     - backup: minion
     - watch_in:
       - service: dovecot_service
@@ -36,8 +37,10 @@ dovecot_packages:
 {% for name, content in dovecot.config.conf.items() %}
 /etc/dovecot/conf.d/{{ name }}.conf:
   file.managed:
-    - contents: |
-        {{ content | indent(8) }}
+    - source: salt://dovecot/files/conf.tmpl
+    - template: jinja
+    - context:
+      section_reference: conf:{{ name }}
     - backup: minion
     - watch_in:
       - service: dovecot_service
@@ -48,8 +51,10 @@ dovecot_packages:
 {% for name, content in dovecot.config.confext.items() %}
 /etc/dovecot/conf.d/{{ name }}.conf.ext:
   file.managed:
-    - contents: |
-        {{ content | indent(8) }}
+    - source: salt://dovecot/files/conf.tmpl
+    - template: jinja
+    - context:
+      section_reference: confext:{{ name }}
     - backup: minion
     - watch_in:
       - service: dovecot_service

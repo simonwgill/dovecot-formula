@@ -1,4 +1,33 @@
-{% from 'dovecot/map.jinja' import dovecot with context %}
-{%- for key, value in dovecot.get('config').get(section).get(filename).items() %}
+{% from 'dovecot/map.jinja' import dovecot with context -%}
+{%- macro output_keypair (key, value) -%}
 {{ key }} = {{ value }}
-{%- endfor %}
+{%- endmacro -%}
+{%- macro output_map (key, contents) -%}
+{{ key }} {
+{% for key, value in contents.items() -%}
+{%- if value is mapping -%}
+{{ output_map (key, value) }}
+{% else -%}
+{{ output_keypair (key, value) }}
+{% endif -%}
+{%- endfor -%}
+}
+{%- endmacro -%}
+{%- set section_path = section_reference.split(':') -%}
+{%- set last_segment = [] -%}
+{%- set i = 0 -%}
+{%- for path_segment in section_path -%}
+{%- set last_segment = last_segment.get(path_segment) if last_segment else dovecot.get('config').get(path_segment) -%}
+{%- if path_segment == section_path[-1] -%} 
+{%- for key, value in last_segment.items() -%}
+{%- if value is mapping -%}
+{{ output_map (key, value) }}
+{% else -%}
+{{ output_keypair (key, value) }}
+{% endif -%}
+{%- endfor -%}
+{%- else -%}
+{%- endif %}
+{%- set i = i + 1 -%}
+{%- endfor -%}
+
